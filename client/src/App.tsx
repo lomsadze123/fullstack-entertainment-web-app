@@ -1,25 +1,40 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+// import axios from "axios";
+// import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import AuthForm from "./components/AuthForm";
+import { useState } from "react";
+
+export interface MainTypes {
+  email: string;
+  password: string;
+  repeatPassword?: string;
+}
 
 const App = () => {
-  const [data, setData] = useState();
+  const [formType, setFormType] = useState("signUp");
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/api/users");
-        setData(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetch();
-  }, []);
+  // const [data, setData] = useState();
+
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:3001/api/users");
+  //       setData(response.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetch();
+  // }, []);
 
   return (
     <div>
-      <h1>{data?.email}</h1>
-      <h1>{data?.password}</h1>
+      <Routes>
+        <Route
+          path="/"
+          element={<AuthForm formType={formType} setFormType={setFormType} />}
+        />
+      </Routes>
     </div>
   );
 };

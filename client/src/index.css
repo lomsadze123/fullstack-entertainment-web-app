@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-color: #10141e;
+}
+
+h2,
+button,
+input,
+p {
+  font-weight: 300;
+}
+
+h3,
+h4 {
+  font-weight: 500;
+}
+
+body,
+button {
+  font-family: "Outfit", sans-serif;
+}
