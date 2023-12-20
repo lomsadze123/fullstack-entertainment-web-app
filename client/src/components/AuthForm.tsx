@@ -1,23 +1,51 @@
 import { MainTypes } from "../App";
 import movieIcon from "../assets/movieIcon.svg";
-import { useForm } from "react-hook-form";
+
+import {
+  FieldErrors,
+  UseFormGetValues,
+  UseFormHandleSubmit,
+  UseFormRegister,
+  UseFormReset,
+} from "react-hook-form";
 
 interface Types {
   formType: string;
   setFormType: (value: string) => void;
+  getValues: UseFormGetValues<MainTypes>;
+  register: UseFormRegister<MainTypes>;
+  signUp: () => Promise<void>;
+  signIn: () => Promise<void>;
+  reset: UseFormReset<MainTypes>;
+  errors: FieldErrors<MainTypes>;
+  handleSubmit: UseFormHandleSubmit<MainTypes, undefined>;
 }
 
-const AuthForm = ({ formType, setFormType }: Types) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    getValues,
-    reset,
-  } = useForm<MainTypes>();
-  const onSubmit = () => {
-    reset();
+const AuthForm = ({
+  handleSubmit,
+  formType,
+  setFormType,
+  getValues,
+  register,
+  signUp,
+  signIn,
+  reset,
+  errors,
+}: Types) => {
+  const onSubmit = async () => {
+    if (getValues("email") && getValues("password"))
+      try {
+        if (formType === "signUp") {
+          await signUp();
+        } else if (formType === "signIn") {
+          await signIn();
+        }
+        reset();
+      } catch (error) {
+        console.error("SignUp failed:", error);
+      }
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -112,7 +140,7 @@ const AuthForm = ({ formType, setFormType }: Types) => {
             : "Don't have an account?"}{" "}
           <span
             onClick={() => {
-              setFormType(`${formType === "signUp" ? "singIn" : "signUp"}`);
+              setFormType(`${formType === "signUp" ? "signIn" : "signUp"}`);
               reset();
             }}
             className="text-[#FC4747] ml-2"

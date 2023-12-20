@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import uniqueValidator from "mongoose-unique-validator";
 import dotenv from "dotenv";
 dotenv.config();
 const { set, connect, Schema, model } = mongoose;
@@ -17,6 +18,7 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,

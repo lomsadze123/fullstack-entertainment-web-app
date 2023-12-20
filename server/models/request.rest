@@ -1,0 +1,11 @@
+GET http://localhost:3001/api/users/6581786d18738bef41db5922
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJla2FAbG9tc2EiLCJpYXQiOjE3MDI5OTMwNDUsImV4cCI6MTcwMjk5MzA2MH0.XNLg1YhDNzoBnNhwss34O_1D6qYfFjI5xK2zt-L3XSE
+### 
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "email": "beka@lomsa",
+  "password": "lomsadze"
+}
