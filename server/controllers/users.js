@@ -31,7 +31,7 @@ userRouter.post("/", async (req, res) => {
       { email: savedUser.email, id: savedUser.id },
       process.env.TOKEN_SECRET,
       {
-        expiresIn: 3600,
+        expiresIn: 15,
       }
     );
 

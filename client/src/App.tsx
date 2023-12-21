@@ -32,8 +32,8 @@ const App = () => {
         repeatPassword: getValues("repeatPassword"),
       });
 
+      localStorage.setItem("upToken", response.data.token);
       navigate(response.data.savedUser.id ?? "/");
-      console.log(response.data.token);
     } catch (error: any) {
       console.log(error.response?.data.error);
     }
@@ -41,17 +41,35 @@ const App = () => {
 
   const signIn = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/api/login", {
-        email: getValues("email"),
-        password: getValues("password"),
-      });
+      const token =
+        localStorage.getItem("upToken") || localStorage.getItem("token");
+
+      const response = await axios.post(
+        "http://localhost:3001/api/login",
+        {
+          email: getValues("email"),
+          password: getValues("password"),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      localStorage.setItem("token", response.data.token);
 
       const user = data?.find((us) => us.email === getValues("email"));
 
       navigate(user?.id ?? "/");
-      console.log("token ", response.data.token);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("upToken");
+        console.log("Token expired, please log in again.");
+      } else {
+        console.log(error);
+      }
     }
   };
 
@@ -72,8 +90,9 @@ const App = () => {
   return (
     <div>
       <Routes>
+        <Route path="/" element={<Movies setFormType={setFormType} />} />
         <Route
-          path="/"
+          path="/auth"
           element={
             <AuthForm
               formType={formType}
@@ -88,7 +107,6 @@ const App = () => {
             />
           }
         />
-        <Route path="/:id" element={<Movies />} />
       </Routes>
     </div>
   );

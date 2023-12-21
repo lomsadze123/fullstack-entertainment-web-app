@@ -22,3 +22,12 @@ body,
 button {
   font-family: "Outfit", sans-serif;
 }
+
+nav svg {
+  width: 16px;
+  height: auto;
+}
+
+.swiper-wraper {
+  width: calc(100% + 2.4rem) !important;
+}
