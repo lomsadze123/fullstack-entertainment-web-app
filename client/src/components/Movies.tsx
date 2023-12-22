@@ -1,15 +1,22 @@
-import Aside from "./Aside";
 import Main from "./Main";
+import { Types } from "./svgIconsObj";
 
 const Movies = ({
-  setFormType,
+  data1,
+  setBookmarked,
+  bookmarked,
 }: {
-  setFormType: React.Dispatch<React.SetStateAction<string>>;
+  data1: Types[];
+  setBookmarked: React.Dispatch<React.SetStateAction<number[]>>;
+  bookmarked: number[];
 }) => {
   return (
     <div className="text-white">
-      <Aside setFormType={setFormType} />
-      <Main />
+      <Main
+        data1={data1}
+        setBookmarked={setBookmarked}
+        bookmarked={bookmarked}
+      />
     </div>
   );
 };

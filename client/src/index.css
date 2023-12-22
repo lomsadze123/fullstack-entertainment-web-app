@@ -9,7 +9,9 @@ body {
 h2,
 button,
 input,
-p {
+p,
+li,
+span {
   font-weight: 300;
 }
 
@@ -28,6 +30,9 @@ nav svg {
   height: auto;
 }
 
-.swiper-wraper {
-  width: calc(100% + 2.4rem) !important;
+@media (min-width: 768px) {
+  nav svg {
+    width: 20px;
+    height: auto;
+  }
 }

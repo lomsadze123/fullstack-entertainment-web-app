@@ -53,7 +53,7 @@ const AuthForm = ({
       className="flex flex-col mt-12 items-center gap-[58.4px] text-[15px] px-6 md:gap-[72.4px] md:mt-20"
     >
       <img className="w-8 h-auto" src={movieIcon} alt="movies icon" />
-      <div className="text-white bg-[#161D2F] p-6 w-full rounded-[10px] max-w-[400px] md:p-8">
+      <div className="text-white bg-[#161D2F] p-6 w-full rounded-[10px] max-w-[400px] md:w-[400px] md:p-8">
         <h2 className="text-[32px] tracking-[-0.05px]">
           {formType === "signUp" ? "Sign Up" : "Login"}
         </h2>

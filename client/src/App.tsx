@@ -1,9 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import AuthForm from "./components/AuthForm";
 import { useForm } from "react-hook-form";
 import Movies from "./components/Movies";
+import { Types } from "./components/svgIconsObj";
+import OnlyMovies from "./components/OnlyMovies";
+import Aside from "./components/Aside";
+import searchIcon from "./assets/icon-search.svg";
 
 export interface MainTypes {
   email: string;
@@ -16,6 +20,10 @@ const App = () => {
   const [formType, setFormType] = useState("signUp");
   const navigate = useNavigate();
   const [data, setData] = useState<MainTypes[]>([]);
+  const [data1, setData1] = useState<Types[]>([]);
+  const [bookmarked, setBookmarked] = useState<number[]>([]);
+  const location = useLocation();
+
   const {
     handleSubmit,
     register,
@@ -85,29 +93,71 @@ const App = () => {
     fetch();
   }, [navigate]);
 
-  // console.log(data);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("./data.json");
+        setData1(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<Movies setFormType={setFormType} />} />
-        <Route
-          path="/auth"
-          element={
-            <AuthForm
-              formType={formType}
-              setFormType={setFormType}
-              getValues={getValues}
-              register={register}
-              signUp={signUp}
-              signIn={signIn}
-              reset={reset}
-              errors={errors}
-              handleSubmit={handleSubmit}
+    <div className="lg:flex lg:items-start md:mt-[23px] md:mx-[25px] lg:m-0 lg:pt-8 lg:pl-8 lg:gap-5">
+      {location.pathname !== "/auth" && <Aside setFormType={setFormType} />}
+      <div className="max-w-[1272px] lg:mx-auto lg:mt-8">
+        {location.pathname !== "/auth" && (
+          <form className="flex gap-4 bg-[#10141E] px-4 mb-6 text-white md:text-2xl">
+            <img className="w-6" src={searchIcon} alt="search icon" />
+            <input
+              className="bg-[#10141E] outline-0 w-full"
+              type="text"
+              placeholder="Search for movies or TV series"
             />
-          }
-        />
-      </Routes>
+          </form>
+        )}
+        <Routes>
+          <Route
+            path="/Home"
+            element={
+              <Movies
+                data1={data1}
+                setBookmarked={setBookmarked}
+                bookmarked={bookmarked}
+              />
+            }
+          />
+          <Route
+            path="/auth"
+            element={
+              <AuthForm
+                formType={formType}
+                setFormType={setFormType}
+                getValues={getValues}
+                register={register}
+                signUp={signUp}
+                signIn={signIn}
+                reset={reset}
+                errors={errors}
+                handleSubmit={handleSubmit}
+              />
+            }
+          />
+          <Route
+            path="/single"
+            element={
+              <OnlyMovies
+                data1={data1}
+                setBookmarked={setBookmarked}
+                bookmarked={bookmarked}
+              />
+            }
+          />
+        </Routes>
+      </div>
     </div>
   );
 };
