@@ -8,6 +8,7 @@ import { Types } from "./components/svgIconsObj";
 import OnlyMovies from "./components/OnlyMovies";
 import Aside from "./components/Aside";
 import searchIcon from "./assets/icon-search.svg";
+import Bookmarks from "./components/Bookmarks";
 
 export interface MainTypes {
   email: string;
@@ -19,8 +20,8 @@ export interface MainTypes {
 const App = () => {
   const [formType, setFormType] = useState("signUp");
   const navigate = useNavigate();
-  const [data, setData] = useState<MainTypes[]>([]);
-  const [data1, setData1] = useState<Types[]>([]);
+  const [data, setData] = useState<MainTypes[]>([]); // server-data
+  const [data1, setData1] = useState<Types[]>([]); // movies-data
   const [bookmarked, setBookmarked] = useState<number[]>([]);
   const location = useLocation();
 
@@ -81,6 +82,14 @@ const App = () => {
     }
   };
 
+  const handleToggleBookmark = (index: number) => {
+    setBookmarked((prevBookmarked) =>
+      prevBookmarked.includes(index)
+        ? prevBookmarked.filter((item) => item !== index)
+        : [...prevBookmarked, index]
+    );
+  };
+
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -125,7 +134,7 @@ const App = () => {
             element={
               <Movies
                 data1={data1}
-                setBookmarked={setBookmarked}
+                handleToggleBookmark={handleToggleBookmark}
                 bookmarked={bookmarked}
               />
             }
@@ -151,7 +160,17 @@ const App = () => {
             element={
               <OnlyMovies
                 data1={data1}
-                setBookmarked={setBookmarked}
+                handleToggleBookmark={handleToggleBookmark}
+                bookmarked={bookmarked}
+              />
+            }
+          />
+          <Route
+            path="bookmarked"
+            element={
+              <Bookmarks
+                data1={data1}
+                handleToggleBookmark={handleToggleBookmark}
                 bookmarked={bookmarked}
               />
             }

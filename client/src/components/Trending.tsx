@@ -6,11 +6,11 @@ import play from "../assets/icon-play.svg";
 
 const Trending = ({
   data1,
-  setBookmarked,
+  handleToggleBookmark,
   bookmarked,
 }: {
   data1: Types[];
-  setBookmarked: React.Dispatch<React.SetStateAction<number[]>>;
+  handleToggleBookmark: (index: number) => void;
   bookmarked: number[];
 }) => {
   const Width = useWindowWidth();
@@ -39,12 +39,7 @@ const Trending = ({
                 />
                 <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col justify-between">
                   <svg
-                    onClick={() =>
-                      setBookmarked((prevBookmarked) => [
-                        ...prevBookmarked,
-                        index,
-                      ])
-                    }
+                    onClick={() => handleToggleBookmark(index)}
                     className="self-end mr-2 mt-2"
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"

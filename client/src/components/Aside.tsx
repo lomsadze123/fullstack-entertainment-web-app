@@ -15,9 +15,13 @@ const Aside = ({
   const [show, setShow] = useState(false);
   const [choose, setChoose] = useState(0);
   return (
-    <aside className="flex justify-between bg-[#161D2F] py-[18px] mb-4 px-6 relative lg:flex-col lg:h-[960px] md:rounded-[10px] lg:rounded-[20px] lg:justify-start lg:gap-[75px] lg:px-[38px] lg:py-9">
-      <img className="w-[25px] h-auto" src={movieImage} alt="movies icon" />
-      <nav className="flex items-center gap-6 lg:flex-col lg:gap-10">
+    <aside className="flex justify-between items-center bg-[#161D2F] py-[18px] mb-4 px-6 relative lg:flex-col lg:h-[960px] md:rounded-[10px] lg:rounded-[20px] lg:justify-start lg:gap-[75px] lg:px-[38px] lg:py-9">
+      <img
+        className="w-[25px] h-auto md:w-8"
+        src={movieImage}
+        alt="movies icon"
+      />
+      <nav className="flex items-center gap-6 lg:flex-col md:gap-10">
         {icons.map((icon, index) => (
           <Link
             to={icon.same ? "single" : icon.label}
@@ -44,7 +48,7 @@ const Aside = ({
       </nav>
       <img
         onClick={() => setShow(!show)}
-        className="w-6 rounded-[24px] border-white border-[1px] mt-auto lg:cursor-pointer"
+        className="w-6 rounded-[24px] border-white border-[1px] mt-auto lg:cursor-pointer md:w-10"
         src={avatar}
         alt="avatar icon"
       />
@@ -52,7 +56,7 @@ const Aside = ({
         <Link
           onClick={() => setShow(false)}
           to="/auth"
-          className="flex flex-col gap-4 absolute z-10 right-5 top-[70px] bg-[#161D2F] p-4 rounded w-[55%] text-[15px] max-w-[260px] lg:top-[850px] lg:right-[-160px] lg:w-[150%]"
+          className="flex flex-col gap-4 absolute z-10 right-5 top-[70px] bg-[#161D2F] p-4 rounded w-[55%] text-[15px] max-w-[260px] lg:top-[850px] lg:right-[-160px] lg:w-[150%] text-white"
         >
           <button
             onClick={() => setFormType("signIn")}

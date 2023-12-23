@@ -3,11 +3,11 @@ import play from "../assets/icon-play.svg";
 
 const Recommended = ({
   data1,
-  setBookmarked,
+  handleToggleBookmark,
   bookmarked,
 }: {
   data1: Types[];
-  setBookmarked: React.Dispatch<React.SetStateAction<number[]>>;
+  handleToggleBookmark: (index: number) => void;
   bookmarked: number[];
 }) => {
   return (
@@ -28,15 +28,10 @@ const Recommended = ({
                   src={images[index + 5]}
                   alt={index.toString()}
                 />
-                <div className="flex flex-col items-center absolute top-0 right-0 bottom-0 left-0 mr-2 mt-2">
+                <div className="flex flex-col items-center absolute top-0 right-0 bottom-0 left-0">
                   <svg
-                    onClick={() =>
-                      setBookmarked((prevBookmarked) => [
-                        ...prevBookmarked,
-                        index,
-                      ])
-                    }
-                    className="self-end mb-9"
+                    onClick={() => handleToggleBookmark(index)}
+                    className="self-end mb-9 mr-2 mt-2"
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"
                     height="32"
@@ -62,7 +57,7 @@ const Recommended = ({
                     <h2 className="text-lg">Play</h2>
                   </div>
                 </div>
-                <div className="flex flex-col">
+                <div>
                   <div className="mt-2">
                     <ul className="flex gap-2 text-xs md:text-[13px]">
                       <li>{items.year}</li>

@@ -3,18 +3,18 @@ import { Types } from "./svgIconsObj";
 
 const Movies = ({
   data1,
-  setBookmarked,
+  handleToggleBookmark,
   bookmarked,
 }: {
   data1: Types[];
-  setBookmarked: React.Dispatch<React.SetStateAction<number[]>>;
+  handleToggleBookmark: (index: number) => void;
   bookmarked: number[];
 }) => {
   return (
     <div className="text-white">
       <Main
         data1={data1}
-        setBookmarked={setBookmarked}
+        handleToggleBookmark={handleToggleBookmark}
         bookmarked={bookmarked}
       />
     </div>
