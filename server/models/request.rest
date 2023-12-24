@@ -9,3 +9,11 @@ Content-Type: application/json
   "email": "beka@lomsa",
   "password": "lomsadze"
 }
+
+###
+POST http://localhost:3001/api/bookmarks
+Content-Type: application/json
+
+{
+"id":"2"
+}

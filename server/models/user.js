@@ -4,10 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const { set, connect, Schema, model } = mongoose;
 
-// const password = process.argv[2];
 const url = process.env.MONGODB_URL;
-// const url = process.env.MONGODB_URL.replace("${PASSWORD}", password);
-
 set("strict", true);
 
 connect(url)
@@ -24,6 +21,12 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  bookmarkId: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Bookmark",
+    },
+  ],
 });
 
 userSchema.set("toJSON", {
@@ -34,6 +37,7 @@ userSchema.set("toJSON", {
   },
 });
 
+userSchema.plugin(uniqueValidator);
 const User = model("User", userSchema);
 
 export default User;

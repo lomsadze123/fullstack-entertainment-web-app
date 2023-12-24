@@ -5,24 +5,24 @@ import { Types } from "./svgIconsObj";
 const Main = ({
   data1,
   handleToggleBookmark,
-  bookmarked,
+  arrayBookmarked,
 }: {
   data1: Types[];
   handleToggleBookmark: (index: number) => void;
 
-  bookmarked: number[];
+  arrayBookmarked: number[];
 }) => {
   return (
     <main className="px-4">
       <Trending
         data1={data1}
         handleToggleBookmark={handleToggleBookmark}
-        bookmarked={bookmarked}
+        arrayBookmarked={arrayBookmarked}
       />
       <Recommended
         data1={data1}
         handleToggleBookmark={handleToggleBookmark}
-        bookmarked={bookmarked}
+        arrayBookmarked={arrayBookmarked}
       />
     </main>
   );

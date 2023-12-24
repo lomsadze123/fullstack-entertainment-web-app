@@ -17,12 +17,16 @@ export interface MainTypes {
   id?: string;
 }
 
+type Bookmark = {
+  id: number;
+};
+
 const App = () => {
   const [formType, setFormType] = useState("signUp");
   const navigate = useNavigate();
   const [data, setData] = useState<MainTypes[]>([]); // server-data
   const [data1, setData1] = useState<Types[]>([]); // movies-data
-  const [bookmarked, setBookmarked] = useState<number[]>([]);
+  const [bookmarked, setBookmarked] = useState<Bookmark[]>([]);
   const location = useLocation();
 
   const {
@@ -82,19 +86,43 @@ const App = () => {
     }
   };
 
-  const handleToggleBookmark = (index: number) => {
-    setBookmarked((prevBookmarked) =>
-      prevBookmarked.includes(index)
-        ? prevBookmarked.filter((item) => item !== index)
-        : [...prevBookmarked, index]
-    );
+  const handleToggleBookmark = async (index: number) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3001/api/bookmarks",
+        {
+          id: index,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${
+              localStorage.getItem("upToken") || localStorage.getItem("token")
+            }`,
+          },
+        }
+      );
+      // await axios.post(`http://localhost:3001/api/users`, {
+      //   bookmarkId: index,
+      // });
+
+      setBookmarked(res.data);
+      // console.log("response: ", res);
+    } catch (error) {
+      console.log(error);
+    }
   };
+  const arrayBookmarked = bookmarked.map((item) => item.id);
 
   useEffect(() => {
     const fetch = async () => {
       try {
         const response = await axios.get("http://localhost:3001/api/users");
+        const responseBookmarks = await axios.get(
+          "http://localhost:3001/api/bookmarks"
+        );
         setData(response.data);
+
+        setBookmarked(responseBookmarks.data);
       } catch (error) {
         console.log(error);
       }
@@ -135,7 +163,7 @@ const App = () => {
               <Movies
                 data1={data1}
                 handleToggleBookmark={handleToggleBookmark}
-                bookmarked={bookmarked}
+                arrayBookmarked={arrayBookmarked}
               />
             }
           />
@@ -161,7 +189,7 @@ const App = () => {
               <OnlyMovies
                 data1={data1}
                 handleToggleBookmark={handleToggleBookmark}
-                bookmarked={bookmarked}
+                arrayBookmarked={arrayBookmarked}
               />
             }
           />
@@ -171,7 +199,7 @@ const App = () => {
               <Bookmarks
                 data1={data1}
                 handleToggleBookmark={handleToggleBookmark}
-                bookmarked={bookmarked}
+                arrayBookmarked={arrayBookmarked}
               />
             }
           />

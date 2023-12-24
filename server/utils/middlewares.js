@@ -9,7 +9,7 @@ const generateToken = (user) => {
     { email: user.email, id: user.id },
     process.env.TOKEN_SECRET,
     {
-      expiresIn: 15, // 1 hours
+      expiresIn: 60 * 60, // 1 hours
     }
   );
 };
