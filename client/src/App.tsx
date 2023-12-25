@@ -41,6 +41,12 @@ const App = () => {
     formState: { errors },
   } = useForm<MainTypes>();
 
+  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("/Home");
+    }
+  }, [location.pathname, navigate]);
+
   const signUp = async () => {
     try {
       const response = await axios.post(
