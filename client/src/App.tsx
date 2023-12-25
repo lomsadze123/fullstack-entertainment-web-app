@@ -19,6 +19,7 @@ export interface MainTypes {
 
 type Bookmark = {
   id: number;
+  userId: string;
 };
 
 const App = () => {
@@ -46,6 +47,7 @@ const App = () => {
       });
 
       localStorage.setItem("upToken", response.data.token);
+      localStorage.setItem("userId", response.data.savedUser.id);
       navigate(response.data.savedUser.id ?? "/");
     } catch (error: any) {
       console.log(error.response?.data.error);
@@ -116,13 +118,21 @@ const App = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/users");
-        const responseBookmarks = await axios.get(
-          "http://localhost:3001/api/bookmarks"
-        );
-        setData(response.data);
+        const userId = localStorage.getItem("userId");
+        if (userId) {
+          const response = await axios.get(`http://localhost:3001/api/users`);
+          const responseBookmarks = await axios.get(
+            `http://localhost:3001/api/bookmarks/${userId}`
+          );
+          setData(response.data);
+          // const filtered = bookmarked.find(
+          //   (item) => item.userId === response.data.userId
+          // );
+          // console.log(filtered);
+          // const user = data?.find((us) => us.email === );
 
-        setBookmarked(responseBookmarks.data);
+          setBookmarked(responseBookmarks.data);
+        }
       } catch (error) {
         console.log(error);
       }

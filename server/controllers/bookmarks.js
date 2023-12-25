@@ -1,28 +1,24 @@
-import express from "express";
 import Bookmark from "../models/bookmark.js";
 import User from "../models/user.js";
-import { authToken } from "../utils/middlewares.js";
-const bookmarkRouter = express.Router();
 
-bookmarkRouter.get("/", async (req, res) => {
-  const bookmark = await Bookmark.find({});
+export const getBookmark = async (req, res) => {
+  const userId = req.params.id;
+  const bookmark = await Bookmark.find({ userId });
   // await Bookmark.deleteMany();
   res.send(bookmark);
-});
+};
 
-bookmarkRouter.post("/", authToken, async (req, res) => {
+export const postBookmark = async (req, res) => {
   const { id } = req.body;
-
-  // console.log("USER: ", req.user);
-  // const userId = req.user.id;
-
   const userId = req.user.id;
 
   try {
-    const existingBookmark = await Bookmark.findOne({ id });
+    const existingBookmark = await Bookmark.findOneAndDelete({ id, userId });
+    const user = await User.findById(userId);
 
     if (existingBookmark) {
-      await Bookmark.deleteOne({ id });
+      user.bookmarkId.pull(existingBookmark.id);
+      await user.save();
       console.log("Bookmark removed:", id);
     } else {
       const newBookmark = new Bookmark({
@@ -31,15 +27,20 @@ bookmarkRouter.post("/", authToken, async (req, res) => {
       });
 
       const savedBookmark = await newBookmark.save();
-      console.log("Bookmark saved:", savedBookmark);
+
+      if (user) {
+        user.bookmarkId.push(savedBookmark.id);
+        await user.save();
+        console.log("Bookmark saved:", savedBookmark);
+      } else {
+        console.log("User not found");
+      }
     }
 
-    const updatedBookmarks = await Bookmark.find({});
+    const updatedBookmarks = await Bookmark.find({ userId });
     res.json(updatedBookmarks);
   } catch (error) {
     console.error("Error toggling bookmark:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
-});
-
-export default bookmarkRouter;
+};

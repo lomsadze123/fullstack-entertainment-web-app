@@ -1,10 +1,8 @@
-import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
-const userRouter = express.Router();
 
-userRouter.get("/", async (req, res) => {
+export const getUser = async (req, res) => {
   // const user = await User.deleteMany();
   try {
     const users = await User.find({}).populate("bookmarkId");
@@ -13,28 +11,17 @@ userRouter.get("/", async (req, res) => {
     console.error("Error fetching users:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
-});
+};
 
-userRouter.get("/:id", async (req, res) => {
-  const userId = req.params.id;
-  try {
-    const user = await User.findById(userId).populate("bookmarkId");
-    res.json(user);
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
-  }
-});
-
-userRouter.post("/", async (req, res) => {
-  console.log("bookmarID: ", req.body);
+export const postUser = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
     const user = new User({
       email: req.body.email,
       password: hashedPassword,
       repeatPassword: hashedPassword,
-      bookmarkId: req.body.bookmarkId,
+      bookmarkId: req.body.bookmarks,
     });
 
     const savedUser = await user.save();
@@ -58,6 +45,4 @@ userRouter.post("/", async (req, res) => {
       });
     }
   }
-});
-
-export default userRouter;
+};

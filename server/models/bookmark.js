@@ -1,11 +1,7 @@
-import mongoose from "mongoose";
-const { set, connect, Schema, model } = mongoose;
+import { set, Schema, model } from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-connect(process.env.MONGODB_URL)
-  .then(() => console.log("connection success"))
-  .catch(() => console.log("connection error"));
 set("strict", true);
 
 const bookmarkSchema = new Schema({

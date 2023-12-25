@@ -1,15 +1,9 @@
-import mongoose from "mongoose";
+import { set, Schema, model } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import dotenv from "dotenv";
 dotenv.config();
-const { set, connect, Schema, model } = mongoose;
 
-const url = process.env.MONGODB_URL;
 set("strict", true);
-
-connect(url)
-  .then((result) => console.log("connection success"))
-  .catch((err) => console.log("connection error"));
 
 const userSchema = new Schema({
   email: {
@@ -23,8 +17,7 @@ const userSchema = new Schema({
   },
   bookmarkId: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "Bookmark",
+      type: Number,
     },
   ],
 });
