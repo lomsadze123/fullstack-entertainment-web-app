@@ -33,7 +33,6 @@ const App = () => {
   const location = useLocation();
   const token =
     localStorage.getItem("upToken") || localStorage.getItem("token");
-
   const {
     handleSubmit,
     register,
@@ -41,6 +40,12 @@ const App = () => {
     reset,
     formState: { errors },
   } = useForm<MainTypes>();
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("/Home");
+    }
+  }, [location.pathname, navigate]);
 
   const signUp = async () => {
     try {
