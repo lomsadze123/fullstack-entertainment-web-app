@@ -8,19 +8,40 @@ import User from "../models/user.js";
 //   res.send(findUser);
 // });
 
-const login = async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  console.log("user: " + user);
-
-  const token = jwt.sign(
+export const generateToken = (user) => {
+  if (!user) {
+    console.error("User is undefined in generateToken");
+    return null;
+  }
+  return jwt.sign(
     { email: user.email, id: user.id },
     process.env.TOKEN_SECRET,
     {
-      expiresIn: 60 * 60, // 1 hours
+      expiresIn: "100y",
     }
   );
-  res.status(200).send({ token });
+};
+
+const login = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+
+    const token = generateToken(user);
+
+    res.status(200).json({ token, user });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({
+      error: "Internal server error",
+    });
+  }
 };
 
 export default login;

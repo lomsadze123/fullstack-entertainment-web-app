@@ -6,11 +6,12 @@ const OnlyMovies = ({
   data1,
   handleToggleBookmark,
   arrayBookmarked,
+  filter,
 }: {
   data1: Types[];
   handleToggleBookmark: (index: number) => void;
-
   arrayBookmarked: number[];
+  filter: string;
 }) => {
   const location = useLocation();
   const which = location.state === "Movies" ? "Movie" : "TV Series";
@@ -23,7 +24,8 @@ const OnlyMovies = ({
       <div className="flex flex-wrap gap-[15px] pb-14 md:gap-[29px] lg:gap-10">
         {data1.map(
           (items, index) =>
-            items.category === which && (
+            items.category === which &&
+            items.title.toLowerCase().includes(filter.toLowerCase()) && (
               <div
                 key={items.title}
                 className="relative group lg:cursor-pointer"

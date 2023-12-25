@@ -8,10 +8,12 @@ const Trending = ({
   data1,
   handleToggleBookmark,
   arrayBookmarked,
+  filter,
 }: {
   data1: Types[];
   handleToggleBookmark: (index: number) => void;
   arrayBookmarked: number[];
+  filter: string;
 }) => {
   const Width = useWindowWidth();
 
@@ -27,7 +29,8 @@ const Trending = ({
       >
         {data1.map(
           (items, index) =>
-            items.isTrending && (
+            items.isTrending &&
+            items.title.toLowerCase().includes(filter.toLowerCase()) && (
               <SwiperSlide
                 key={items.title}
                 className="relative lg:cursor-pointer group"

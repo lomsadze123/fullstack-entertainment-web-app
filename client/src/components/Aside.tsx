@@ -3,14 +3,13 @@ import avatar from "../assets/avatar.png";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import icons from "./svgIconsObj";
-// import navTv from "../assets/icon-nav-tv-series.svg";
-// import tv from "../assets/icon-category-tv.svg";
-// import movies from "../assets/icon-category-movie.svg";
 
 const Aside = ({
   setFormType,
+  token,
 }: {
   setFormType: React.Dispatch<React.SetStateAction<string>>;
+  token: string | null;
 }) => {
   const [show, setShow] = useState(false);
   const [choose, setChoose] = useState(0);
@@ -56,17 +55,25 @@ const Aside = ({
         <Link
           onClick={() => setShow(false)}
           to="/auth"
-          className="flex flex-col gap-4 absolute z-10 right-5 top-[70px] bg-[#161D2F] p-4 rounded w-[55%] text-[15px] max-w-[260px] lg:top-[850px] lg:right-[-160px] lg:w-[150%] text-white"
+          className="flex flex-col gap-4 absolute z-10 right-5 top-[70px] bg-[#161D2F] p-4 rounded w-[55%] text-[15px] max-w-[260px] lg:top-[850px] lg:right-[-180px] lg:w-[150%] text-white"
         >
-          <button
-            onClick={() => setFormType("signIn")}
-            className="bg-[#FC4747] rounded font-medium py-1"
-          >
-            Login
-          </button>
-          <button className="bg-[#FC4747] rounded font-medium py-1">
-            Sign Up
-          </button>
+          {!token ? (
+            <>
+              <button
+                onClick={() => setFormType("signIn")}
+                className="bg-[#FC4747] rounded font-medium py-1"
+              >
+                Login
+              </button>
+              <button className="bg-[#FC4747] rounded font-medium py-1">
+                Sign Up
+              </button>
+            </>
+          ) : (
+            <button className="bg-[#FC4747] rounded font-medium py-1">
+              Log Out
+            </button>
+          )}
         </Link>
       )}
     </aside>

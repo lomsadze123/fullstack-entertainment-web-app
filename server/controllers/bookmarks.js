@@ -9,10 +9,9 @@ export const getBookmark = async (req, res) => {
 };
 
 export const postBookmark = async (req, res) => {
-  const { id } = req.body;
-  const userId = req.user.id;
-
   try {
+    const { id } = req.body;
+    const userId = req.user.id;
     const existingBookmark = await Bookmark.findOneAndDelete({ id, userId });
     const user = await User.findById(userId);
 

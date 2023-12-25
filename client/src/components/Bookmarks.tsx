@@ -5,10 +5,12 @@ const Bookmarks = ({
   data1,
   handleToggleBookmark,
   arrayBookmarked,
+  filter,
 }: {
   data1: Types[];
   handleToggleBookmark: (index: number) => void;
   arrayBookmarked: number[];
+  filter: string;
 }) => {
   return (
     <div className="flex flex-col gap-6 md:gap-10 px-4">
@@ -22,7 +24,8 @@ const Bookmarks = ({
               {data1.map(
                 (items, index) =>
                   arrayBookmarked.includes(index) &&
-                  items.category === "Movie" && (
+                  items.category === "Movie" &&
+                  items.title.toLowerCase().includes(filter.toLowerCase()) && (
                     <div
                       key={items.title}
                       className="relative group lg:cursor-pointer"
@@ -106,7 +109,8 @@ const Bookmarks = ({
               {data1.map(
                 (items, index) =>
                   arrayBookmarked.includes(index) &&
-                  items.category === "TV Series" && (
+                  items.category === "TV Series" &&
+                  items.title.toLowerCase().includes(filter.toLowerCase()) && (
                     <div
                       key={items.title}
                       className="relative group lg:cursor-pointer"

@@ -5,10 +5,12 @@ const Recommended = ({
   data1,
   handleToggleBookmark,
   arrayBookmarked,
+  filter,
 }: {
   data1: Types[];
   handleToggleBookmark: (index: number) => void;
   arrayBookmarked: number[];
+  filter: string;
 }) => {
   return (
     <section>
@@ -18,7 +20,8 @@ const Recommended = ({
       <div className="flex flex-wrap gap-[15px] pb-14 md:gap-[29px] lg:gap-10">
         {data1.map(
           (items, index) =>
-            !items.isTrending && (
+            !items.isTrending &&
+            items.title.toLowerCase().includes(filter.toLowerCase()) && (
               <div
                 key={items.title}
                 className="relative group lg:cursor-pointer"

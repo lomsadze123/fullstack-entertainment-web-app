@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+import { generateToken } from "./login.js";
 
 export const getUser = async (req, res) => {
   // const user = await User.deleteMany();
@@ -27,13 +27,7 @@ export const postUser = async (req, res) => {
     const savedUser = await user.save();
     console.log("saved user", savedUser);
 
-    const token = jwt.sign(
-      { email: savedUser.email, id: savedUser.id },
-      process.env.TOKEN_SECRET,
-      {
-        expiresIn: 60 * 60,
-      }
-    );
+    const token = generateToken(savedUser);
 
     res.status(201).json({ token, savedUser });
   } catch (error) {

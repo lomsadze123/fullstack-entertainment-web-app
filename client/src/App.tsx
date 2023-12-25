@@ -28,7 +28,10 @@ const App = () => {
   const [data, setData] = useState<MainTypes[]>([]); // server-data
   const [data1, setData1] = useState<Types[]>([]); // movies-data
   const [bookmarked, setBookmarked] = useState<Bookmark[]>([]);
+  const [filter, setFilter] = useState("");
   const location = useLocation();
+  const token =
+    localStorage.getItem("upToken") || localStorage.getItem("token");
 
   const {
     handleSubmit,
@@ -48,7 +51,7 @@ const App = () => {
 
       localStorage.setItem("upToken", response.data.token);
       localStorage.setItem("userId", response.data.savedUser.id);
-      navigate(response.data.savedUser.id ?? "/");
+      navigate("/Home");
     } catch (error: any) {
       console.log(error.response?.data.error);
     }
@@ -56,9 +59,6 @@ const App = () => {
 
   const signIn = async () => {
     try {
-      const token =
-        localStorage.getItem("upToken") || localStorage.getItem("token");
-
       const response = await axios.post(
         "http://localhost:3001/api/login",
         {
@@ -73,10 +73,9 @@ const App = () => {
       );
 
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userId_login", response.data.user.id);
 
-      const user = data?.find((us) => us.email === getValues("email"));
-
-      navigate(user?.id ?? "/");
+      navigate("/Home");
     } catch (error: any) {
       if (error.response?.status === 403) {
         localStorage.removeItem("token");
@@ -103,33 +102,31 @@ const App = () => {
           },
         }
       );
-      // await axios.post(`http://localhost:3001/api/users`, {
-      //   bookmarkId: index,
-      // });
 
       setBookmarked(res.data);
-      // console.log("response: ", res);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response.status === 500) {
+        navigate("/auth");
+      } else {
+        console.log(error);
+      }
     }
   };
+
   const arrayBookmarked = bookmarked.map((item) => item.id);
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        const userId = localStorage.getItem("userId");
+        const userId =
+          localStorage.getItem("userId") ||
+          localStorage.getItem("userId_login");
         if (userId) {
           const response = await axios.get(`http://localhost:3001/api/users`);
           const responseBookmarks = await axios.get(
             `http://localhost:3001/api/bookmarks/${userId}`
           );
           setData(response.data);
-          // const filtered = bookmarked.find(
-          //   (item) => item.userId === response.data.userId
-          // );
-          // console.log(filtered);
-          // const user = data?.find((us) => us.email === );
 
           setBookmarked(responseBookmarks.data);
         }
@@ -154,12 +151,18 @@ const App = () => {
 
   return (
     <div className="lg:flex lg:items-start md:mt-[23px] md:mx-[25px] lg:m-0 lg:pt-8 lg:pl-8 lg:gap-5">
-      {location.pathname !== "/auth" && <Aside setFormType={setFormType} />}
+      {location.pathname !== "/auth" && (
+        <Aside token={token} setFormType={setFormType} />
+      )}
       <div className="max-w-[1272px] lg:mx-auto lg:mt-8">
         {location.pathname !== "/auth" && (
-          <form className="flex gap-4 bg-[#10141E] px-4 mb-6 text-white md:text-2xl">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="flex gap-4 bg-[#10141E] px-4 mb-6 text-white md:text-2xl"
+          >
             <img className="w-6" src={searchIcon} alt="search icon" />
             <input
+              onChange={(e) => setFilter(e.target.value)}
               className="bg-[#10141E] outline-0 w-full"
               type="text"
               placeholder="Search for movies or TV series"
@@ -174,6 +177,7 @@ const App = () => {
                 data1={data1}
                 handleToggleBookmark={handleToggleBookmark}
                 arrayBookmarked={arrayBookmarked}
+                filter={filter}
               />
             }
           />
@@ -200,6 +204,7 @@ const App = () => {
                 data1={data1}
                 handleToggleBookmark={handleToggleBookmark}
                 arrayBookmarked={arrayBookmarked}
+                filter={filter}
               />
             }
           />
@@ -210,6 +215,7 @@ const App = () => {
                 data1={data1}
                 handleToggleBookmark={handleToggleBookmark}
                 arrayBookmarked={arrayBookmarked}
+                filter={filter}
               />
             }
           />

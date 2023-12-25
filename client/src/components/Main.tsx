@@ -6,11 +6,12 @@ const Main = ({
   data1,
   handleToggleBookmark,
   arrayBookmarked,
+  filter,
 }: {
   data1: Types[];
   handleToggleBookmark: (index: number) => void;
-
   arrayBookmarked: number[];
+  filter: string;
 }) => {
   return (
     <main className="px-4">
@@ -18,11 +19,13 @@ const Main = ({
         data1={data1}
         handleToggleBookmark={handleToggleBookmark}
         arrayBookmarked={arrayBookmarked}
+        filter={filter}
       />
       <Recommended
         data1={data1}
         handleToggleBookmark={handleToggleBookmark}
         arrayBookmarked={arrayBookmarked}
+        filter={filter}
       />
     </main>
   );
