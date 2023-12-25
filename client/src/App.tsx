@@ -25,7 +25,7 @@ type Bookmark = {
 const App = () => {
   const [formType, setFormType] = useState("signUp");
   const navigate = useNavigate();
-  const [data, setData] = useState<MainTypes[]>([]); // server-data
+  const [_, setData] = useState<MainTypes[]>([]); // server-data
   const [data1, setData1] = useState<Types[]>([]); // movies-data
   const [bookmarked, setBookmarked] = useState<Bookmark[]>([]);
   const [filter, setFilter] = useState("");
