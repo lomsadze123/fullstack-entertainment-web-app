@@ -29,6 +29,7 @@ const App = () => {
   const [data1, setData1] = useState<Types[]>([]); // movies-data
   const [bookmarked, setBookmarked] = useState<Bookmark[]>([]);
   const [filter, setFilter] = useState("");
+  const [additionError, setAdditionError] = useState(false);
   const location = useLocation();
   const token =
     localStorage.getItem("upToken") || localStorage.getItem("token");
@@ -43,11 +44,14 @@ const App = () => {
 
   const signUp = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/api/users", {
-        email: getValues("email"),
-        password: getValues("password"),
-        repeatPassword: getValues("repeatPassword"),
-      });
+      const response = await axios.post(
+        "https://fullstack-entertainment-web-app.onrender.com/api/users",
+        {
+          email: getValues("email"),
+          password: getValues("password"),
+          repeatPassword: getValues("repeatPassword"),
+        }
+      );
 
       localStorage.setItem("upToken", response.data.token);
       localStorage.setItem("userId", response.data.savedUser.id);
@@ -60,7 +64,7 @@ const App = () => {
   const signIn = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/login",
+        "https://fullstack-entertainment-web-app.onrender.com/api/login",
         {
           email: getValues("email"),
           password: getValues("password"),
@@ -74,9 +78,12 @@ const App = () => {
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userId_login", response.data.user.id);
-
+      setAdditionError(false);
       navigate("/Home");
     } catch (error: any) {
+      if (error.response?.status === 401) {
+        setAdditionError(true);
+      }
       if (error.response?.status === 403) {
         localStorage.removeItem("token");
         localStorage.removeItem("upToken");
@@ -90,7 +97,7 @@ const App = () => {
   const handleToggleBookmark = async (index: number) => {
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/bookmarks",
+        "https://fullstack-entertainment-web-app.onrender.com/api/bookmarks",
         {
           id: index,
         },
@@ -122,9 +129,11 @@ const App = () => {
           localStorage.getItem("userId") ||
           localStorage.getItem("userId_login");
         if (userId) {
-          const response = await axios.get(`http://localhost:3001/api/users`);
+          const response = await axios.get(
+            `https://fullstack-entertainment-web-app.onrender.com/api/users`
+          );
           const responseBookmarks = await axios.get(
-            `http://localhost:3001/api/bookmarks/${userId}`
+            `https://fullstack-entertainment-web-app.onrender.com/api/bookmarks/${userId}`
           );
           setData(response.data);
 
@@ -194,6 +203,7 @@ const App = () => {
                 reset={reset}
                 errors={errors}
                 handleSubmit={handleSubmit}
+                additionError={additionError}
               />
             }
           />

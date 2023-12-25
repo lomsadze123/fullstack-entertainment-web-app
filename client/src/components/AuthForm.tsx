@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MainTypes } from "../App";
 import movieIcon from "../assets/movieIcon.svg";
 
@@ -19,6 +20,7 @@ interface Types {
   reset: UseFormReset<MainTypes>;
   errors: FieldErrors<MainTypes>;
   handleSubmit: UseFormHandleSubmit<MainTypes, undefined>;
+  additionError: boolean;
 }
 
 const AuthForm = ({
@@ -31,10 +33,13 @@ const AuthForm = ({
   signIn,
   reset,
   errors,
+  additionError,
 }: Types) => {
+  const [loading, setLoading] = useState(false);
   const onSubmit = async () => {
     if (getValues("email") && getValues("password"))
       try {
+        setLoading(true);
         if (formType === "signUp") {
           await signUp();
         } else if (formType === "signIn") {
@@ -43,6 +48,8 @@ const AuthForm = ({
         reset();
       } catch (error) {
         console.error("SignUp failed:", error);
+      } finally {
+        setLoading(false);
       }
   };
 
@@ -130,7 +137,9 @@ const AuthForm = ({
           )}
         </div>
         <button className="bg-[#FC4747] rounded py-[14px] w-full mb-6">
-          {formType === "signUp"
+          {loading
+            ? "Loading..."
+            : formType === "signUp"
             ? "Create an account"
             : "Login to your account"}
         </button>
@@ -148,6 +157,11 @@ const AuthForm = ({
             {formType === "signUp" ? "Login" : "Sign Up"}
           </span>{" "}
         </p>
+        {additionError && (
+          <h3 className="text-[#FC4747] md:text-lg absolute left-[45%] md:left-[50%] top-[35%] md:top-[48%]">
+            Invalid email or password
+          </h3>
+        )}
       </div>
     </form>
   );
