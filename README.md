@@ -14,10 +14,11 @@ The Fullstack Entertainment Web App is a web application that provides users wit
   - React (with React Router)
   - Tailwind CSS
   - React Hook Form
+  - Axios
 - Backend:
   - Node.js
   - Express.js
-  - MongoDB (or your preferred database)
+  - MongoDB, Mongoose
   - JWT for authentication
  
     ## Setup
