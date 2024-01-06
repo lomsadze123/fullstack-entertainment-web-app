@@ -26,7 +26,7 @@ The Fullstack Entertainment Web App is a web application that provides users wit
 1. Clone the Repository: Start by cloning the repository to your local machine using the following command:
 
 ```bash
-git clone https://github.com/lomsadze123/audiophile-ecommerce-website.git
+git clone https://github.com/lomsadze123/fullstack-entertainment-web-app.git
 ```
 
 2. Install Dependencies: Install the project dependencies using npm:
